@@ -5,8 +5,13 @@ def transpose(mat):
     return [list(row) for row in zip(*mat)]
 
 def matrix_mult(a, b):
-    return [[sum(a_row[k] * b[k][col] for col in range(len(b[0]))] 
-            for a_row in a for k in range(len(b)))]
+    return [
+        [
+            sum(a[i][k] * b[k][j] for k in range(len(b)))
+            for j in range(len(b[0]))
+        ]
+        for i in range(len(a))
+    ]
 
 def determinant(mat):
     if len(mat) == 1:
@@ -19,8 +24,13 @@ def inverse(mat):
     if det == 0:
         raise ValueError("Matrix is singular")
     n = len(mat)
-    adj = [[(-1)**(i+j) * determinant([row[:j]+row[j+1:] for r, row in enumerate(mat) if r != i])
-            for i in range(n)] for j in range(n)]
+    adj = [
+        [
+            (-1)**(i+j) * determinant([row[:j]+row[j+1:] for r, row in enumerate(mat) if r != i])
+            for i in range(n)
+        ]
+        for j in range(n)
+    ]
     adj = transpose(adj)
     return [[adj[i][j]/det for j in range(n)] for i in range(n)]
 
